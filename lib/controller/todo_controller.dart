@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -117,6 +116,6 @@ class TodoController extends GetxController {
 
   Future<void> logout() async {
     await _authService.signOut();
-    Get.offAll(() => LoginPage()); // go back to login
+    Get.offAll(() => LoginPage());
   }
 }

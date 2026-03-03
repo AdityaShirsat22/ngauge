@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_list/controller/todo_controller.dart';
-import 'package:todo_list/pages/loginpage.dart';
 import 'package:todo_list/pages/pofileScreen.dart';
 
 // ignore: must_be_immutable

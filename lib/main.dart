@@ -7,7 +7,6 @@ import 'package:todo_list/controller/todo_controller.dart';
 import 'package:todo_list/pages/loginpage.dart';
 import 'package:todo_list/pages/todo_list.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
 Future<void> _backgroundMessageHandle(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -29,6 +28,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
+  final user = FirebaseAuth.instance.currentUser;
   final TodoController todoController = TodoController();
 
   @override
@@ -36,6 +36,9 @@ class MyApp extends StatelessWidget {
     //var box = Hive.box('mybox');
     //bool isLoggedIn = box.get('isLoggedIn', defaultValue: false);
 
-    return GetMaterialApp(debugShowCheckedModeBanner: false, home: LoginPage());
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: user == null ? LoginPage() : TodoList(),
+    );
   }
 }

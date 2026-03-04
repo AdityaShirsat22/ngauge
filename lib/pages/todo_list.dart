@@ -8,6 +8,7 @@ class TodoList extends StatelessWidget {
   TodoList({super.key});
   TextEditingController textEditingController = TextEditingController();
   final TodoController controller = Get.put(TodoController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

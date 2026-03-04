@@ -8,6 +8,7 @@ import 'package:todo_list/pages/loginpage.dart';
 import 'package:todo_list/pages/todo_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+
 Future<void> _backgroundMessageHandle(RemoteMessage message) async {
   await Firebase.initializeApp();
 }

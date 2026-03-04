@@ -14,6 +14,7 @@ class TodoController extends GetxController {
   Dio dio = Dio();
 
   final AuthService _authService = AuthService();
+  var isLoading = false.obs;
 
   String get username => Hive.box('mybox').get('username', defaultValue: "");
   String get password => Hive.box('mybox').get('password', defaultValue: "");
@@ -26,9 +27,7 @@ class TodoController extends GetxController {
     Notificationservice service = Notificationservice();
     service.requestNotificationPermission();
     service.getFCMtoken();
-
     service.initLocalNotification();
-
     FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
       service.showNotification(msg);
     });
@@ -102,10 +101,11 @@ class TodoController extends GetxController {
     }
   }
 
+  //login
   Future<void> login() async {
     final user = await _authService.signInWithGoogle();
 
-    print("USER IS: $user"); // 👈 ADD THIS
+    print("USER IS: $user");
 
     if (user != null) {
       Get.offAll(() => TodoList());
@@ -114,8 +114,45 @@ class TodoController extends GetxController {
     }
   }
 
+  //logout
   Future<void> logout() async {
     await _authService.signOut();
     Get.offAll(() => LoginPage());
+  }
+
+  // Send OTP
+  void sendOtp(String phone) async {
+    try {
+      isLoading.value = true;
+      await _authService.sendOtp(phone);
+      Get.snackbar("Success", "OTP Sent", duration: Duration(seconds: 1));
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Verify OTP
+  void verifyOtp(String otp) async {
+    try {
+      isLoading.value = true;
+
+      final user = await _authService.verifyOtp(otp);
+
+      if (user != null) {
+        Get.offAll(TodoList());
+      } else {
+        Get.snackbar(
+          "Error",
+          "Invalid OTP",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Wrong OTP", snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

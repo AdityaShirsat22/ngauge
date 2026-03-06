@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:todo_list/model/model.dart';
@@ -12,6 +13,8 @@ import '../service/auth_service.dart';
 class TodoController extends GetxController {
   var model = RxList<TodoModel>();
   Dio dio = Dio();
+
+  var todoList = [].obs;
 
   final AuthService _authService = AuthService();
   var isLoading = false.obs;
@@ -35,19 +38,25 @@ class TodoController extends GetxController {
 
   //GET
   Future<RxList<TodoModel>> getTodos() async {
-    final respone = await dio.get(
-      "https://699d402d83e60a406a459c39.mockapi.io/api/todolist",
-    );
-    var data = respone.data;
+    try {
+      final response = await dio.get(
+        "https://699d402d83e60a406a459c39.mockapi.io/api/todolist",
+      );
 
-    if (respone.statusCode == 200) {
-      for (Map<String, dynamic> index in data) {
-        model.add(TodoModel.fromJson(index));
+      if (response.statusCode == 200) {
+        var data = response.data;
+
+        model.clear();
+
+        for (Map<String, dynamic> item in data) {
+          model.add(TodoModel.fromJson(item));
+        }
       }
-      return model;
-    } else {
-      return model;
+    } catch (e) {
+      print("Error fetching todos: $e");
     }
+
+    return model;
   }
 
   //Post
@@ -62,7 +71,9 @@ class TodoController extends GetxController {
         model.add(TodoModel.fromJson(response.data));
       }
     } catch (e) {
-      print("Error while adding todo: $e");
+      if (kDebugMode) {
+        print("Error while adding todo: $e");
+      }
     }
   }
 
@@ -154,5 +165,14 @@ class TodoController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  List searchTodos(String query) {
+    return todoList.where((todo) {
+      final title = todo.title.toLowerCase();
+      final input = query.toLowerCase();
+
+      return title.contains(input);
+    }).toList();
   }
 }

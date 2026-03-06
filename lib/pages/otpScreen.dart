@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:todo_list/controller/todo_controller.dart';
@@ -27,15 +26,8 @@ class OtpScreen extends StatelessWidget {
             Pinput(
               length: 6,
               autofocus: true,
-              controller: otpController,
-              
+              controller: otpController,          
             ),
-
-            // TextField(
-            //   controller: otpController,
-            //   keyboardType: TextInputType.number,
-            //   decoration: InputDecoration(labelText: "Enter OTP"),
-            // ),
             SizedBox(height: 20),
 
             ElevatedButton(
@@ -59,7 +51,6 @@ class OtpScreen extends StatelessWidget {
                   );
                   return;
                 }
-
                 controller.verifyOtp(otp);
               },
 

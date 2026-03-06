@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_list/controller/todo_controller.dart';
+import 'package:todo_list/pages/customSearchDelegate.dart';
 import 'package:todo_list/pages/pofileScreen.dart';
 
 // ignore: must_be_immutable
@@ -20,7 +21,10 @@ class TodoList extends StatelessWidget {
           },
           icon: Icon(Icons.account_circle, size: 30),
         ),
-        title: const Text("T O D O"),
+        title: const Text(
+          "T O D O",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.amber,
 
@@ -129,17 +133,30 @@ class TodoList extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: const Text(
-                  "All todos",
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Center(
+                    child: const Text(
+                      "All todos",
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Color.fromARGB(255, 102, 102, 102),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                  IconButton(
+                    onPressed: () {
+                      showSearch(
+                        context: context,
+                        delegate: CustomSearchDelegate(),
+                      );
+                    },
+                    icon: Icon(Icons.search),
+                  ),
+                ],
               ),
-
               const SizedBox(height: 20),
 
               Expanded(

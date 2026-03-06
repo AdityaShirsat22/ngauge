@@ -40,7 +40,6 @@ class CustomSearchDelegate extends SearchDelegate {
 
         return ListTile(
           title: Text(todo.title ?? ""),
-          //subtitle: Text(todo.description ?? ""),
         );
       },
     );
@@ -65,7 +64,6 @@ class CustomSearchDelegate extends SearchDelegate {
               leading: Icon(Icons.location_city),
 
               title: Text(todo.title ?? ""),
-              //subtitle: Text(todo.description ?? ""),
             ),
             SizedBox(height: 3),
           ],

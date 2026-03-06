@@ -1,25 +1,25 @@
 class TodoModel {
-  String? title;
-  String? des;
   String? id;
+  String? title;
+  String? description;
+  bool? isCompleted;
 
-  TodoModel({this.title, this.des, this.id});
+  TodoModel({this.id, this.title, this.description, this.isCompleted});
 
-  TodoModel.fromJson(Map<String, dynamic> json) {
-    title = json["title"];
-    des = json["des"];
-    id = json["id"];
-  }
-
-  static List<TodoModel> fromList(List<Map<String, dynamic>> list) {
-    return list.map(TodoModel.fromJson).toList();
+  factory TodoModel.fromJson(Map<String, dynamic> json) {
+    return TodoModel(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      isCompleted: json['isCompleted'] ?? false,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data["title"] = title;
-    data["des"] = des;
-    data["id"] = id;
-    return data;
+    return {
+      "title": title,
+      "description": description,
+      "isCompleted": isCompleted,
+    };
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_list/controller/todo_controller.dart';
+import 'package:todo_list/pages/CategoryScreen.dart';
 import 'package:todo_list/pages/customSearchDelegate.dart';
 import 'package:todo_list/pages/pofileScreen.dart';
 
-// ignore: must_be_immutable
 class TodoList extends StatelessWidget {
   TodoList({super.key});
   TextEditingController textEditingController = TextEditingController();
@@ -61,72 +61,6 @@ class TodoList extends StatelessWidget {
         ],
       ),
 
-      //Bottom navigation bar
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.all(20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.amber),
-              ),
-              onPressed: () {
-                Get.defaultDialog(
-                  title: "Enter new Task",
-                  content: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: textEditingController,
-                              decoration: InputDecoration(
-                                hint: Text("Enter task"),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: Text("Cancel"),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (textEditingController.text.isNotEmpty) {
-                                await controller.postTodos(
-                                  textEditingController.text,
-                                );
-                                textEditingController.clear();
-                                Get.back();
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                Colors.amber,
-                              ),
-                            ),
-                            child: const Text("Save"),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-              child: Text("ADD NEW", style: TextStyle(color: Colors.black)),
-            ),
-          ],
-        ),
-      ),
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -164,6 +98,7 @@ class TodoList extends StatelessWidget {
                   () => ListView.builder(
                     itemCount: controller.model.length,
                     itemBuilder: (context, i) {
+                      final todo = controller.model[i];
                       return Container(
                         padding: const EdgeInsets.all(10),
                         margin: const EdgeInsets.symmetric(vertical: 8),
@@ -179,18 +114,27 @@ class TodoList extends StatelessWidget {
 
                             Expanded(
                               child: Text(
-                                controller.model[i].title ?? "",
-                                style: const TextStyle(
-                                  color: Colors.black,
+                                todo.title ?? "",
+                                style: TextStyle(
                                   fontSize: 18,
+                                  decoration: todo.isCompleted == true
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
                                 ),
                               ),
                             ),
 
+                            Checkbox(
+                              value: todo.isCompleted ?? false,
+                              onChanged: (value) {
+                                controller.updateStatus(todo.id!, value!);
+                              },
+                            ),
+
                             IconButton(
+                              icon: const Icon(Icons.edit),
                               onPressed: () {
-                                textEditingController.text =
-                                    controller.model[i].title ?? "";
+                                textEditingController.text = todo.title ?? "";
 
                                 Get.defaultDialog(
                                   title: "Edit Task",
@@ -202,34 +146,29 @@ class TodoList extends StatelessWidget {
                                           hintText: "Edit task",
                                         ),
                                       ),
+
                                       const SizedBox(height: 20),
+
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           OutlinedButton(
-                                            onPressed: () {
-                                              Get.back();
-                                            },
+                                            onPressed: () => Get.back(),
                                             child: const Text("Cancel"),
                                           ),
+
                                           ElevatedButton(
-                                            style: const ButtonStyle(
-                                              backgroundColor:
-                                                  WidgetStatePropertyAll(
-                                                    Colors.amber,
-                                                  ),
-                                            ),
                                             onPressed: () async {
                                               if (textEditingController
                                                   .text
                                                   .isNotEmpty) {
                                                 await controller.updateTodo(
-                                                  controller.model[i].id!,
+                                                  todo.id!,
                                                   textEditingController.text,
                                                   i,
                                                 );
-                                                textEditingController.clear();
+
                                                 Get.back();
                                               }
                                             },
@@ -241,40 +180,32 @@ class TodoList extends StatelessWidget {
                                   ),
                                 );
                               },
-                              icon: const Icon(Icons.edit),
                             ),
 
                             IconButton(
+                              icon: const Icon(Icons.delete),
                               onPressed: () {
                                 Get.defaultDialog(
                                   title: "DELETE",
                                   content: Column(
                                     children: [
-                                      SizedBox(height: 20),
+                                      const SizedBox(height: 20),
+
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           OutlinedButton(
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                            child: Text("Cancel"),
+                                            onPressed: () => Get.back(),
+                                            child: const Text("Cancel"),
                                           ),
+
                                           ElevatedButton(
                                             onPressed: () {
-                                              controller.deleteTodos(
-                                                controller.model[i].id!,
-                                              );
+                                              controller.deleteTodos(todo.id!);
                                               Get.back();
                                             },
-                                            child: Text("Delete"),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  WidgetStatePropertyAll(
-                                                    Colors.amber,
-                                                  ),
-                                            ),
+                                            child: const Text("Delete"),
                                           ),
                                         ],
                                       ),
@@ -282,7 +213,6 @@ class TodoList extends StatelessWidget {
                                   ),
                                 );
                               },
-                              icon: const Icon(Icons.delete),
                             ),
                           ],
                         ),
@@ -293,6 +223,78 @@ class TodoList extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+      // Bottom navigation bar
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            label: "Category",
+          ),
+        ],
+        onTap: (index) {
+          if (index == 1) {
+            Get.to(() => Categoryscreen());
+          }
+        },
+      ),
+      floatingActionButton: Center(
+        heightFactor: 0.2,
+        widthFactor: 6.7,
+        child: FloatingActionButton(
+          onPressed: () {
+            Get.defaultDialog(
+              title: "Enter new Task",
+              content: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: textEditingController,
+                          decoration: InputDecoration(hint: Text("Enter task")),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (textEditingController.text.isNotEmpty) {
+                            await controller.postTodos(
+                              textEditingController.text,
+                            );
+                            textEditingController.clear();
+                            Get.back();
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(Colors.amber),
+                        ),
+                        child: const Text("Save"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+          backgroundColor: Color.fromARGB(255, 255, 226, 37),
+          child: Icon(Icons.add),
         ),
       ),
     );

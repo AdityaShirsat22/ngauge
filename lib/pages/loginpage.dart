@@ -110,6 +110,12 @@ class LoginPage extends StatelessWidget {
                           box.put('password', passwordController.text);
 
                           Get.off(() => TodoList());
+                        } else {
+                          Get.snackbar(
+                            "INVALID",
+                            "TRY AGAIN",
+                            duration: Duration(seconds: 1),
+                          );
                         }
                       },
                       child: const Text(

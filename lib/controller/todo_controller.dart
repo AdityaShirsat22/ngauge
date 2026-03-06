@@ -22,6 +22,14 @@ class TodoController extends GetxController {
   String get username => Hive.box('mybox').get('username', defaultValue: "");
   String get password => Hive.box('mybox').get('password', defaultValue: "");
 
+  int get totalTasks => model.length;
+
+  int get completedTasks =>
+      model.where((task) => task.isCompleted == true).length;
+
+  int get pendingTasks =>
+      model.where((task) => task.isCompleted != true).length;
+
   @override
   void onInit() {
     super.onInit();
@@ -174,5 +182,19 @@ class TodoController extends GetxController {
 
       return title.contains(input);
     }).toList();
+  }
+
+  //update status
+  Future<void> updateStatus(String id, bool status) async {
+    try {
+      await dio.put(
+        "https://699d402d83e60a406a459c39.mockapi.io/api/todolist/$id",
+        data: {"isCompleted": status},
+      );
+
+      getTodos(); // refresh list
+    } catch (e) {
+      print("Status update error: $e");
+    }
   }
 }

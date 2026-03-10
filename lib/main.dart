@@ -1,5 +1,7 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -7,7 +9,6 @@ import 'package:todo_list/controller/todo_controller.dart';
 import 'package:todo_list/pages/loginpage.dart';
 import 'package:todo_list/pages/todo_list.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 
 Future<void> _backgroundMessageHandle(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -23,7 +24,7 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandle);
 
-  runApp(MyApp());
+  runApp(DevicePreview(enabled: ! kReleaseMode, builder: (context) => MyApp()));
 }
 
 class MyApp extends StatelessWidget {

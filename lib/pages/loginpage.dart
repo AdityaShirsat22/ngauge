@@ -18,10 +18,6 @@ class LoginPage extends StatelessWidget {
     var box = Hive.box('mybox');
 
     return Scaffold(
-      // appBar: AppBar(
-      //   //title: Center(child: Text("Login Page")),
-      //   //backgroundColor: Colors.amberAccent,
-      // ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -49,7 +45,7 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  /// Image
+                  // Image
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
@@ -61,7 +57,7 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  /// Email
+                  // Email
                   TextField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -75,7 +71,7 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 15),
 
-                  /// Password
+                  // Password
                   TextField(
                     controller: passwordController,
                     obscureText: true,
@@ -90,7 +86,7 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  /// Login Button
+                  // Login Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -132,7 +128,7 @@ class LoginPage extends StatelessWidget {
                   const Divider(),
                   const SizedBox(height: 20),
 
-                  /// Phone
+                  // Phone
                   TextField(
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
@@ -147,7 +143,7 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 15),
 
-                  /// Send OTP Button
+                  // Send OTP Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -194,10 +190,11 @@ class LoginPage extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 25),
-                  const Divider(),
+                  Divider(),
+
                   const SizedBox(height: 25),
 
-                  /// Google Sign In
+                  // Google Sign In
                   SizedBox(
                     width: double.infinity,
                     height: 50,

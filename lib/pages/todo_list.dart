@@ -5,6 +5,7 @@ import 'package:todo_list/pages/CategoryScreen.dart';
 import 'package:todo_list/pages/customSearchDelegate.dart';
 import 'package:todo_list/pages/pofileScreen.dart';
 
+// ignore: must_be_immutable
 class TodoList extends StatelessWidget {
   TodoList({super.key});
   TextEditingController textEditingController = TextEditingController();
@@ -13,7 +14,6 @@ class TodoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //app bar
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {

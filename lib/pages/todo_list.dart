@@ -5,7 +5,6 @@ import 'package:todo_list/pages/CategoryScreen.dart';
 import 'package:todo_list/pages/customSearchDelegate.dart';
 import 'package:todo_list/pages/pofileScreen.dart';
 
-// ignore: must_be_immutable
 class TodoList extends StatelessWidget {
   TodoList({super.key});
   TextEditingController textEditingController = TextEditingController();
@@ -95,129 +94,134 @@ class TodoList extends StatelessWidget {
 
               Expanded(
                 child: Obx(
-                  () => ListView.builder(
-                    itemCount: controller.model.length,
-                    itemBuilder: (context, i) {
-                      final todo = controller.model[i];
-                      return Container(
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.amberAccent,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.place_outlined),
+                  () => RefreshIndicator(
+                    onRefresh: controller.refresh,
+                    child: ListView.builder(
+                      itemCount: controller.model.length,
+                      itemBuilder: (context, i) {
+                        final todo = controller.model[i];
+                        return Container(
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.amberAccent,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.place_outlined),
 
-                            const SizedBox(width: 10),
+                              const SizedBox(width: 10),
 
-                            Expanded(
-                              child: Text(
-                                todo.title ?? "",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  decoration: todo.isCompleted == true
-                                      ? TextDecoration.lineThrough
-                                      : TextDecoration.none,
+                              Expanded(
+                                child: Text(
+                                  todo.title ?? "",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: todo.isCompleted == true
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
+                                  ),
                                 ),
                               ),
-                            ),
 
-                            Checkbox(
-                              value: todo.isCompleted ?? false,
-                              onChanged: (value) {
-                                controller.updateStatus(todo.id!, value!);
-                              },
-                            ),
+                              Checkbox(
+                                value: todo.isCompleted ?? false,
+                                onChanged: (value) {
+                                  controller.updateStatus(todo.id!, value!);
+                                },
+                              ),
 
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                textEditingController.text = todo.title ?? "";
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  textEditingController.text = todo.title ?? "";
 
-                                Get.defaultDialog(
-                                  title: "Edit Task",
-                                  content: Column(
-                                    children: [
-                                      TextFormField(
-                                        controller: textEditingController,
-                                        decoration: const InputDecoration(
-                                          hintText: "Edit task",
+                                  Get.defaultDialog(
+                                    title: "Edit Task",
+                                    content: Column(
+                                      children: [
+                                        TextFormField(
+                                          controller: textEditingController,
+                                          decoration: const InputDecoration(
+                                            hintText: "Edit task",
+                                          ),
                                         ),
-                                      ),
 
-                                      const SizedBox(height: 20),
+                                        const SizedBox(height: 20),
 
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          OutlinedButton(
-                                            onPressed: () => Get.back(),
-                                            child: const Text("Cancel"),
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            OutlinedButton(
+                                              onPressed: () => Get.back(),
+                                              child: const Text("Cancel"),
+                                            ),
 
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              if (textEditingController
-                                                  .text
-                                                  .isNotEmpty) {
-                                                await controller.updateTodo(
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                if (textEditingController
+                                                    .text
+                                                    .isNotEmpty) {
+                                                  await controller.updateTodo(
+                                                    todo.id!,
+                                                    textEditingController.text,
+                                                    i,
+                                                  );
+
+                                                  Get.back();
+                                                }
+                                              },
+                                              child: const Text("Update"),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  Get.defaultDialog(
+                                    title: "DELETE",
+                                    content: Column(
+                                      children: [
+                                        const SizedBox(height: 20),
+
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            OutlinedButton(
+                                              onPressed: () => Get.back(),
+                                              child: const Text("Cancel"),
+                                            ),
+
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                controller.deleteTodos(
                                                   todo.id!,
-                                                  textEditingController.text,
-                                                  i,
                                                 );
-
                                                 Get.back();
-                                              }
-                                            },
-                                            child: const Text("Update"),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                Get.defaultDialog(
-                                  title: "DELETE",
-                                  content: Column(
-                                    children: [
-                                      const SizedBox(height: 20),
-
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          OutlinedButton(
-                                            onPressed: () => Get.back(),
-                                            child: const Text("Cancel"),
-                                          ),
-
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              controller.deleteTodos(todo.id!);
-                                              Get.back();
-                                            },
-                                            child: const Text("Delete"),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                                              },
+                                              child: const Text("Delete"),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

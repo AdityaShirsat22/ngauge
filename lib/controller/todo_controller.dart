@@ -197,4 +197,9 @@ class TodoController extends GetxController {
       print("Status update error: $e");
     }
   }
+
+  @override
+  Future<void> refresh() {
+    return Future.delayed(Duration(seconds: 1), () => getTodos());
+  }
 }

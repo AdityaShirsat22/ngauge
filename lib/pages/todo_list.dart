@@ -247,60 +247,69 @@ class TodoList extends StatelessWidget {
           }
         },
       ),
-      floatingActionButton: Center(
-        heightFactor: 0.2,
-        widthFactor: 6.7,
-        child: FloatingActionButton(
-          onPressed: () {
-            Get.defaultDialog(
-              title: "Enter new Task",
-              content: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: textEditingController,
-                          decoration: InputDecoration(hint: Text("Enter task")),
+
+      //floating action button
+      floatingActionButton: //Center(
+          //heightFactor: 0.2,
+          //widthFactor: 6.7,
+          //child:
+          FloatingActionButton(
+            onPressed: () {
+              Get.defaultDialog(
+                title: "Enter new Task",
+                content: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: textEditingController,
+                            decoration: InputDecoration(
+                              hint: Text("Enter task"),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text("Cancel"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (textEditingController.text.isNotEmpty) {
-                            await controller.postTodos(
-                              textEditingController.text,
-                            );
-                            textEditingController.clear();
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
                             Get.back();
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(Colors.amber),
+                          },
+                          child: Text("Cancel"),
                         ),
-                        child: const Text("Save"),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-          backgroundColor: Color.fromARGB(255, 255, 226, 37),
-          child: Icon(Icons.add),
-        ),
-      ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (textEditingController.text.isNotEmpty) {
+                              await controller.postTodos(
+                                textEditingController.text,
+                              );
+                              textEditingController.clear();
+                              Get.back();
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              Colors.amber,
+                            ),
+                          ),
+                          child: const Text("Save"),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+            backgroundColor: Color.fromARGB(255, 255, 226, 37),
+            child: Container(child: Icon(Icons.add)),
+          ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
+      //),
     );
   }
 }

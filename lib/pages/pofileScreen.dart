@@ -18,9 +18,11 @@ class Profile_Screen extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             Center(
-              child: const CircleAvatar(
-                radius: 40,
-                child: Icon(Icons.person, size: 40),
+              child: CircleAvatar(
+                radius: 70,
+                backgroundImage: NetworkImage(
+                  "https://i.pinimg.com/736x/98/1d/b6/981db6bd8ddaf7d9bb381e502913dcd6.jpg",
+                ),
               ),
             ),
 
